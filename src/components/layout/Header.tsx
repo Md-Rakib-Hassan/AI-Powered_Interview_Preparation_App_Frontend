@@ -3,14 +3,21 @@ import { Menu, Bell, Search, Laptop } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ProfileAvatar from '../ui/ProfileAvatar';
 import { UserContext } from '../../context/userContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ProfileAvatarMenu from '../ui/ProfileAvatarMenu';
 
 interface HeaderProps {
   toggleSidebar: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
-  const { user } = useContext(UserContext);
+  const { user, clearUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const onLogout = () => {
+      localStorage.clear();
+        clearUser();
+        navigate("/");
+    }
   console.log(user);
   return (
     <header className="sticky top-0 z-10 flex items-center h-16 px-4 bg-white border-b border-gray-200">
@@ -32,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         </motion.button>
 
         <div className="flex items-center">
-          <ProfileAvatar imageUrl={user?.profileImageUrl} size='h-10 w-10'></ProfileAvatar>
+          <ProfileAvatarMenu onLogout={onLogout} ignore={true} imageUrl={user?.profileImageUrl} size='h-10 w-10'></ProfileAvatarMenu>
           <div className="ml-2 hidden sm:block">
             <div className="text-sm font-medium text-gray-700">{user?.email }</div>
             <div className="text-xs text-gray-500">{user?.name}</div>

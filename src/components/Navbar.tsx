@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { MenuIcon, X, Laptop } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/userContext';
-import ProfileInfo from './Cards/ProfileInfo';
 import ProfileAvatarMenu from './ui/ProfileAvatarMenu';
 
 const Navbar: React.FC = () => {

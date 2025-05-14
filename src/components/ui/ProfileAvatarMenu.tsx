@@ -1,25 +1,28 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ProfileAvatar from "./ProfileAvatar";
+import { useNavigate } from "react-router-dom";
 
 interface ProfileAvatarMenuProps {
   imageUrl: string;
-  onDashboard: () => void;
+  onDashboard?: () => void;
   onLogout: () => void;
   size?: string;
-  name:string
+  ignore?: boolean;
+  name?:string
 }
 
 const ProfileAvatarMenu = ({
   imageUrl,
   name,
+  ignore,
   onDashboard,
   onLogout,
   size = "w-12 h-12",
 }: ProfileAvatarMenuProps) => {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
- 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,7 +53,16 @@ const ProfileAvatarMenu = ({
             transition={{ type: "spring", stiffness: 300, damping: 20 }}
             className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-xl z-50 overflow-hidden"
           >
-            <button
+            {
+              ignore?<button
+              onClick={() => {
+                setOpen(false);
+                  navigate('/');
+              }}
+              className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+            >
+              Home
+            </button>:<button
               onClick={() => {
                 setOpen(false);
                 onDashboard();
@@ -59,6 +71,7 @@ const ProfileAvatarMenu = ({
             >
               Dashboard
             </button>
+            }
             <button
               onClick={() => {
                 setOpen(false);
