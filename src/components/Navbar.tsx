@@ -1,19 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { MenuIcon, X, Laptop } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/userContext';
+import ProfileInfo from './Cards/ProfileInfo';
+import ProfileAvatarMenu from './ui/ProfileAvatarMenu';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const { user, clearUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    
+ 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+
+   const onLogout = () => {
+      localStorage.clear();
+        clearUser();
+        navigate("/");
+    }
+
+    const onDashboard = () => {
+      navigate("/dashboard");
+    }
 
   return (
     <header 
@@ -35,7 +51,7 @@ const Navbar: React.FC = () => {
             <a href="#pricing" className="text-gray-700 hover:text-blue-700 transition-colors">Pricing</a>
             <a href="#faq" className="text-gray-700 hover:text-blue-700 transition-colors">FAQ</a>
           </nav>
-          
+          {user ? <ProfileAvatarMenu name={user.name} onLogout={onLogout} onDashboard={onDashboard} imageUrl={user.profileImageUrl}></ProfileAvatarMenu> :
           <div className="hidden md:flex items-center space-x-4">
             <Link to={'/login'} className="text-blue-700 hover:text-blue-800 transition-colors">Login</Link>
             <Link
@@ -45,6 +61,7 @@ const Navbar: React.FC = () => {
               Get Started
             </Link>
           </div>
+          }
           
           <button 
             className="md:hidden focus:outline-none" 
@@ -93,6 +110,20 @@ const Navbar: React.FC = () => {
             >
               FAQ
             </a>
+            {user ? <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200">
+              <a 
+                href="#" 
+                className="text-blue-700 hover:text-blue-800 transition-colors py-2"
+              >
+                Dashboard
+              </a>
+              <a 
+                href="#" 
+                className="bg-red-700/70 hover:bg-red-800/70 text-white px-4 py-2 rounded-lg transition-colors text-center"
+              >
+                LogOut
+              </a>
+            </div> :
             <div className="flex flex-col space-y-2 pt-2 border-t border-gray-200">
               <a 
                 href="#" 
@@ -106,7 +137,7 @@ const Navbar: React.FC = () => {
               >
                 Get Started
               </a>
-            </div>
+            </div>}
           </div>
         </div>
       )}

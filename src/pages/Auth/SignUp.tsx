@@ -1,22 +1,50 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Laptop, ArrowRight } from 'lucide-react';
+import { Laptop, ArrowRight, UserCircle, UploadCloud } from 'lucide-react';
+import toast, { ToastBar, Toaster } from 'react-hot-toast';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import { UserContext } from '../../context/userContext';
+import uploadImage from '../../utils/uploadImage';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const { user, updateUser} = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement signup logic
-    navigate('/dashboard');
+    if (!imageFile) {
+      return toast.error("Please upload your photo.");
+    }
+    try {
+      const imageUploadRes = await uploadImage(imageFile);
+      const profileImageUrl = imageUploadRes.imageUrl || "";
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        name,
+        email,
+        password,
+        profileImageUrl,
+      })
+      console.log(response);
+      
+      if (response?.data?.success) {
+        toast.success(response?.data?.message);
+        return navigate('/login');
+      }
+    } catch (error) {
+      return toast.error("Something went wrong.");
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <Toaster/>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -41,6 +69,39 @@ const Signup: React.FC = () => {
         
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
+            <div className="flex justify-center">
+  <label htmlFor="avatar-upload" className="cursor-pointer relative group">
+    <input
+      id="avatar-upload"
+      type="file"
+      accept="image/*"
+      className="hidden"
+      onChange={(e) => {
+        if (e.target.files && e.target.files[0]) {
+          setImageFile(e.target.files[0]);
+        }
+      }}
+    />
+    <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-gray-300 shadow-md relative">
+      {imageFile ? (
+        <img
+          src={URL.createObjectURL(imageFile)}
+          alt="Avatar"
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+          <UserCircle className="w-full h-full" />
+        </div>
+      )}
+
+      {/* Upload icon overlay */}
+      <div className="absolute bottom-2 right-2 bg-white p-1 rounded-full shadow group-hover:scale-110 transition-transform">
+        <UploadCloud className="w-5 h-5 text-blue-600" />
+      </div>
+    </div>
+  </label>
+</div>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Full name

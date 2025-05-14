@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Brain, BookOpen, PinIcon, MessageSquare } from 'lucide-react';
+
 
 const Hero: React.FC = () => {
   const features = [
@@ -9,6 +10,7 @@ const Hero: React.FC = () => {
     { icon: <PinIcon className="h-5 w-5" />, text: "Pin Important Topics" },
     { icon: <MessageSquare className="h-5 w-5" />, text: "Dynamic Explanations" }
   ];
+
 
   return (
     <section className="pt-24 lg:pt-32 pb-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-blue-50 to-white">

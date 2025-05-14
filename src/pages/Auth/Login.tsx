@@ -1,17 +1,38 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Laptop, ArrowRight } from 'lucide-react';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/apiPaths';
+import toast from 'react-hot-toast';
+import { UserContext } from '../../context/userContext';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { updateUser }=useContext(UserContext)
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    navigate('/dashboard');
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password
+      })
+
+      const { token } = response.data.data;
+      console.log(response);
+      if (token) {
+        localStorage.setItem('token', token)
+        updateUser(response.data.data)
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Login Failed");
+      
+    }
   };
 
   return (
