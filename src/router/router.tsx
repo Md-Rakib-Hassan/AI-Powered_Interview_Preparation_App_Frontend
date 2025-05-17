@@ -4,6 +4,8 @@ import LandingPage from "../pages/LandingPage";
 import Login from "../pages/Auth/Login";
 import Signup from "../pages/Auth/Signup";
 import Dashboard from "../pages/Home/Dashboard";
+import DashboardLayout from "../components/layout/DashboardLayout";
+import InterviewPrep from "../pages/InterviewPrep/InterviewPrep";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +28,18 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element:<Dashboard></Dashboard>
+    element: <DashboardLayout></DashboardLayout>,
+    children: [
+      {
+        index:true,
+        path:"",
+        element:<Dashboard></Dashboard>
+      },
+      {
+        path: "interview-prep/:sessionID",
+        element:<InterviewPrep></InterviewPrep>
+      }
+    ]
     }
 ]);
 

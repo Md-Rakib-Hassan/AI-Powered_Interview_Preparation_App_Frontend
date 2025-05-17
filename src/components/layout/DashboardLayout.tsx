@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import Header from './Header';
+import { Outlet } from 'react-router-dom';
 
-const DashboardLayout = ({children}) => {
+const DashboardLayout = () => {
     
 
     return (
         <div>
             <Header></Header>
-            {children}
+            <Outlet></Outlet>
         </div>
     );
 };

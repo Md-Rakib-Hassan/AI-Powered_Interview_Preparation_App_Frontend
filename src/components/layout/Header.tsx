@@ -18,7 +18,6 @@ const Header: React.FC<HeaderProps> = ({ toggleSidebar }) => {
         clearUser();
         navigate("/");
     }
-  console.log(user);
   return (
     <header className="sticky top-0 z-10 flex items-center h-16 px-4 bg-white border-b border-gray-200">
       

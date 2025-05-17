@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Brain, BookOpen, PinIcon, MessageSquare } from 'lucide-react';
+import { UserContext } from '../context/userContext';
 
 
 const Hero: React.FC = () => {
@@ -11,6 +12,7 @@ const Hero: React.FC = () => {
     { icon: <MessageSquare className="h-5 w-5" />, text: "Dynamic Explanations" }
   ];
 
+  const { user } = useContext(UserContext);
 
   return (
     <section className="pt-24 lg:pt-32 pb-16 lg:pb-24 overflow-hidden bg-gradient-to-b from-blue-50 to-white">
@@ -52,7 +54,7 @@ const Hero: React.FC = () => {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.a 
-                href="#"
+                href={user?`/dashboard`:`/login`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium text-center transition-colors shadow-lg shadow-blue-600/20 flex items-center justify-center group"
