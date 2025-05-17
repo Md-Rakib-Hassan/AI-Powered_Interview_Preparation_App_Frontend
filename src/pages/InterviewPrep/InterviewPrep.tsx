@@ -55,7 +55,7 @@ const InterviewPrep = () => {
             
         } catch (error) {
             setExplanation(null);
-            setErrorMsg("Failed to generate explanation, Try agaain later");
+            setErrorMsg("Failed to generate explanation, Try again later");
             console.error(error);
         } finally {
             setIsLoading(false);

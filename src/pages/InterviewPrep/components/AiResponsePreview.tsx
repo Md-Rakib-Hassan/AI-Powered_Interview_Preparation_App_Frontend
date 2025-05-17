@@ -116,7 +116,7 @@ function CodeBlock({ code, language }) {
         setTimeout(() => setCopied(false), 2000);
     };
 
-    return <div className="relative my-6 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+    return <div className="relative my-6 rounded-lg overflow-hidden bg-gray-50 border border-gray-200">
   <div className="flex items-center justify-between px-4 py-2 bg-gray-200 border-b border-gray-300">
     <div className="flex items-center space-x-2">
       <LucideCode size={16} className="text-gray-500" />
